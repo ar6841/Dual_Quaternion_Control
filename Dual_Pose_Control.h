@@ -24,11 +24,11 @@ const T& DT, const T& total_time, const T& tuning_param)
 
     int n = Robot.getNumJointsTotal()
 
-    Eigen::Matrix<T,8, Eigen::Dynamic> = Jacobian(8,n)
+    Eigen::Matrix<T,8, Eigen::Dynamic> Jacobian(8,n)
 
-    Eigen::Matrix<T,Eigen::Dynamic, Eigen::Dynamic> = THETA_TABLE(n,N);
+    Eigen::Matrix<T,Eigen::Dynamic, Eigen::Dynamic> THETA_TABLE(n,N);
 
-    Eigen::Matrix<T,Eigen::Dynamic, 1> = theta_dot(n,1), theta_curr(n,1), theta_next(n,1);
+    Eigen::Matrix<T,Eigen::Dynamic, 1> theta_dot(n,1), theta_curr(n,1), theta_next(n,1);
 
     for(int i=0; i<N; i++) //use for loop to avoid infinite till error converges
     {
