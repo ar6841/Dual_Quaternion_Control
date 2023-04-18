@@ -2,10 +2,6 @@
 Control using dual quaternion differrence error. 
 */
 
-#include <Eigen/Core>
-#include <Eigen/Geometry>
-#include "Dual_Quaternion_Forward_Kinematics/dualquat/dualquat.h"
-
 namespace Controller
 {
 
@@ -22,9 +18,9 @@ const T& DT, const T& total_time, const T& tuning_param)
 
     int N = ceil(total_time/DT); 
 
-    int n = Robot.getNumJointsTotal()
+    int n = Robot.getNumJointsTotal();
 
-    Eigen::Matrix<T,8, Eigen::Dynamic> Jacobian(8,n)
+    Eigen::Matrix<T,8, Eigen::Dynamic> Jacobian(8,n);
 
     Eigen::Matrix<T,Eigen::Dynamic, Eigen::Dynamic> THETA_TABLE(n,N);
 
@@ -42,7 +38,7 @@ const T& DT, const T& total_time, const T& tuning_param)
 
         theta_curr = Robot.getJointVector();
 
-        theta_next = dt*theta_dot + theta_curr;
+        theta_next = DT*theta_dot + theta_curr;
 
         Robot.setJointVector(theta_next);
 
