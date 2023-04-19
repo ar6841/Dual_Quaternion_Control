@@ -7,7 +7,7 @@ namespace Controller
 
 template<typename T>
 Eigen::Matrix<T,Eigen::Dynamic, Eigen::Dynamic>
-pose_difference_controller(const Kinematics::RobotLinks<T>& Robot, const dualquat::DualQuaternion<T>& desired_pose, 
+pose_difference_controller(Kinematics::RobotLinks<T>& Robot, const dualquat::DualQuaternion<T>& desired_pose, 
 const T& DT, const T& total_time, const T& tuning_param)
 {
     // Avoid excessive stack memory usage by not declaring any variables inside.
@@ -32,17 +32,21 @@ const T& DT, const T& total_time, const T& tuning_param)
 
         error = desired_pose - current;
 
-        Jacobian = ComputeJacobian(Robot);
+        Jacobian = Kinematics::ComputeJacobian(Robot);
 
-        theta_dot = Jacobian*K*error;
+        // pinv() method is slow
 
-        theta_curr = Robot.getJointVector();
+        theta_dot = -(Jacobian.transpose())*(K*error); // these brackets are SUPER important
 
-        theta_next = DT*theta_dot + theta_curr;
+        // Change the operators within dualquat_base to accomodate no brackets
 
-        Robot.setJointVector(theta_next);
+        theta_curr = Robot.getJointVec();
 
-        THETA_TABLE.col(i) = theta_next;
+        theta_next = (DT*theta_dot + theta_curr);
+
+        Robot.setJointVec(theta_next);
+
+        THETA_TABLE.col(i) = theta_next.array().round();
   
     }
 
