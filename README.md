@@ -1,2 +1,2 @@
 # Dual_Quaternion_Control
-Robotic control using dual quaternion algebra
+Header files for robotic control using dual quaternion algebra. More controllers to be added
